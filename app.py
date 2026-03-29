@@ -4,12 +4,18 @@ from fastai.vision.all import *
 
 def is_cat(x): return x[0].isupper()
 
-learn = load_learner('model.pkl')
-labels = learn.dls.vocab
+learn = None
+
+def load_model():
+    global learn
+    learn = load_learner('model.pkl')
 
 def predict(img):
+    if learn is None:
+        load_model()
     img = PILImage.create(img)
     pred, pred_idx, probs = learn.predict(img)
+    labels = learn.dls.vocab
     return {labels[i]: float(probs[i]) for i in range(len(labels))}
 
 demo = gr.Interface(
@@ -19,4 +25,4 @@ demo = gr.Interface(
     title="FastAI image classifier"
 )
 
-demo.launch(server_name="0.0.0.0", server_port=int(os.environ.get("PORT", 7860)))
+demo.launch(server_name="0.0.0.0", server_port=int(os.environ.get("PORT", 10000)))
