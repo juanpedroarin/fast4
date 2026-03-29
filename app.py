@@ -1,3 +1,4 @@
+import os
 import gradio as gr
 from fastai.vision.all import *
 
@@ -18,4 +19,4 @@ demo = gr.Interface(
     title="FastAI image classifier"
 )
 
-demo.launch(server_name="0.0.0.0", server_port=7860)
+demo.launch(server_name="0.0.0.0", server_port=int(os.environ.get("PORT", 7860)))
